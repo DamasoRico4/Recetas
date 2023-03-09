@@ -1,0 +1,63 @@
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<p></p>
+	<table>
+		<tbody>
+			<tr>
+				<td>ID</td>
+				<td>NOMBRE</td>
+				<td> INGREDIENTES</td>
+			</tr>
+			<tr th:each="receta: ${Recetas}">
+				<td th:text="${receta.id}" />
+				<td th:text="${receta.nombre}" />
+				
+			</tr>
+		</tbody>
+	</table>
+	<p></p>
+
+	<table>
+		<tbody>
+			<tr>
+				<td>INGREDIENTE</td>
+				<td>CANTIDAD</td>
+			</tr>
+			<tr th:each="lista: ${Lista}">
+				<td th:text="${lista.ingrediente.nombre}" />
+				<td th:text="${lista.cantidad}" />
+			</tr>
+		</tbody>
+	</table>
+	<p></p>
+
+	<table>
+		<tbody>
+			<tr>
+				<td>ID</td>
+				<td>NOMBRE</td>
+			</tr>
+			<tr th:each="ingrediente: ${Ingredientes}">
+				<td th:text="${ingrediente.id}" />
+				<td th:text="${ingrediente.nombre}" />
+			</tr>
+		</tbody>
+	</table>
+	<p></p>
+	<table>
+		<tbody>
+			<tr>
+				<td>ID</td>
+				<td>FECHA</td>
+			</tr>
+			<tr th:each="calendario: ${Calendario}">
+				<td th:text="${calendario.receta.nombre}" />
+				<td th:text="${calendario.fecha}" />
+			</tr>
+		</tbody>
+	</table>
+
+</body>
+</html>
