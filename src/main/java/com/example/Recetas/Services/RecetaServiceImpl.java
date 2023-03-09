@@ -72,9 +72,6 @@ public class RecetaServiceImpl implements RecetaService {
 			result.add(new IngredienteCant (recing.getIngrediente(), recing.getCantidad()));
 		}
 		return result;
-		
-		
-	}
-	
+	}	
 
 }

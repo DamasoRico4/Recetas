@@ -21,5 +21,4 @@ public interface RecetaService {
 	public List<Ingredientes> getingredientes (Integer id);
 	public List<IngredienteCant> getingredientecant (Integer id);
 	
-	
 }

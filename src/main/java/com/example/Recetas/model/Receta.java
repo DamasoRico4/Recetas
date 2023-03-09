@@ -1,7 +1,9 @@
 package com.example.Recetas.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
 import com.example.Recetas.Utility.IngredienteCant;
 
@@ -115,6 +117,23 @@ public class Receta{
 		this.fechas = fechas;
 	}
 	
+	public List<IngredienteCant> getingcant () {
+		List<IngredienteCant> result =new ArrayList<>();
+		for(RecetaIngredientes receing: recetaingredientes) {
+			result.add(new IngredienteCant(receing.getIngrediente(), receing.getCantidad()));
+		}
+		
+		return result;
+		
+	}
+	
+	public int getprecio (){
+		int result=0;
+		for(RecetaIngredientes receing: recetaingredientes) {			
+			result+=receing.getCantidad()*receing.getIngrediente().getPrecio();
+		}
+		return result;		
+	}
 
 
 	
