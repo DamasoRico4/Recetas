@@ -16,7 +16,7 @@ public class IngredientesServiceImpl implements IngredientesService {
 
 	@Autowired
 	private IngredientesRepository ingredientesrep;
-	
+
 	@Override
 	public Ingredientes save(Ingredientes ingrediente) {
 		return ingredientesrep.save(ingrediente);
@@ -44,21 +44,21 @@ public class IngredientesServiceImpl implements IngredientesService {
 	}
 
 	@Override
-	public List<Ingredientes> getbyname(String name) {
+	public Ingredientes getbyname(String name) {
 		return ingredientesrep.findBynombre(name);
 	}
-@Override
-public List<Ingredientes> saveall(Ingredientes... ingredientes) {
-	return ingredientesrep.saveAll(Arrays.asList(ingredientes));
-}
+	@Override
+	public List<Ingredientes> saveall(Ingredientes... ingredientes) {
+		return ingredientesrep.saveAll(Arrays.asList(ingredientes));
+	}
 	@Override
 	public List<Receta> getrecetas(Integer id) {
 		Ingredientes ing = ingredientesrep.findById(id).orElse(null);
 		List<Receta> result = new ArrayList<>();
 		for (RecetaIngredientes recing: ing.getRecetas()) {
-		result.add(recing.getReceta());	
+			result.add(recing.getReceta());	
 		}
 		return result;
-		}
-	
+	}
+
 }

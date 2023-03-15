@@ -7,5 +7,5 @@ import com.example.Recetas.model.Ingredientes;
 
 
 public interface IngredientesRepository extends JpaRepository<Ingredientes, Integer> {
-	List<Ingredientes> findBynombre(String name);
+	Ingredientes findBynombre(String name);
 }

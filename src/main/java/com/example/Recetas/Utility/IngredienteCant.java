@@ -1,5 +1,6 @@
 package com.example.Recetas.Utility;
 
+import com.example.Recetas.controller.APIcalls;
 import com.example.Recetas.model.Ingredientes;
 
 public class IngredienteCant {
@@ -12,10 +13,17 @@ public class IngredienteCant {
 		this.cantidad = cantidad;
 	}
 	
+	
 	@Override
 	public boolean equals(Object obj) {
 		
 		return this.ingrediente.getId() == ((IngredienteCant)obj).ingrediente.getId();
 	}
+@Override
+public String toString() {
+	// TODO Auto-generated method stub
+	return this.ingrediente.getNombre()+""+this.cantidad;
+}
+	
 	
 }

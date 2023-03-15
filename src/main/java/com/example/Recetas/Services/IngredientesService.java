@@ -15,8 +15,8 @@ public interface IngredientesService {
 	public void update(Ingredientes patata);
 	public void delete(Integer id); 
 	public List<Ingredientes> getall ();
-	public List<Ingredientes> getbyname(String name);
+	public Ingredientes getbyname(String name);
 	public List<Ingredientes> saveall(Ingredientes... ingredientes);
 	public List<Receta> getrecetas (Integer id);
-	
+
 }

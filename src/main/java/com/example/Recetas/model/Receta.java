@@ -75,55 +75,42 @@ public class Receta{
 		return nombre;
 	}
 
-
-
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
-
 
 	public String getMomento() {
 		return momento;
 	}
 
-
-
 	public void setMomento(String momento) {
 		this.momento = momento;
 	}
-
-
 
 	public Set<RecetaIngredientes> getIngredientes() {
 		return recetaingredientes;
 	}
 
-
-
 	public void setIngredientes(Set<RecetaIngredientes> recetaingredientes) {
 		this.recetaingredientes = recetaingredientes;
 	}
 
-
-
 	public Set<Calendario> getFechas() {
 		return fechas;
 	}
-
-
 
 	public void setFechas(Set<Calendario> fechas) {
 		this.fechas = fechas;
 	}
 	
 	public List<IngredienteCant> getingcant () {
-		List<IngredienteCant> result =new ArrayList<>();
-		for(RecetaIngredientes receing: recetaingredientes) {
-			result.add(new IngredienteCant(receing.getIngrediente(), receing.getCantidad()));
-		}
+		return recetaingredientes.stream().map( (r)-> new IngredienteCant(r.getIngrediente(), r.getCantidad()) ).toList();
 		
-		return result;
+		/*List<IngredienteCant> result =new ArrayList<>();
+		 * List<IngredienteCant> result =new ArrayList<>();
+		 * for(RecetaIngredientes receing: recetaingredientes) {
+		 * result.add(new IngredienteCant(receing.getIngrediente(), receing.getCantidad()));
+		 * } */
 		
 	}
 	

@@ -43,6 +43,11 @@ public class Ingredientes {
 		this.nombre = nombre;
 		this.precio = precio;
 	}
+	public Ingredientes(String nombre) {
+		super();
+		this.nombre = nombre;
+		this.precio = 0;
+	}
 	public int getId() {
 		return id;
 	}
