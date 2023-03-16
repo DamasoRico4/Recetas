@@ -23,14 +23,14 @@ public class Ingredientes {
 	@Column(nullable = false,unique = true)
 	private String nombre;
 	@Column(nullable = true)
-	private int precio;
+	private double precio;
 	@OneToMany(mappedBy = "ingrediente",cascade = CascadeType.ALL, orphanRemoval = true)
 	Set<RecetaIngredientes> recetas;
 	
 	
 	
 	
-	public Ingredientes(int id, String nombre, int precio, Set<RecetaIngredientes> recetas) {
+	public Ingredientes(int id, String nombre, double precio, Set<RecetaIngredientes> recetas) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -40,7 +40,7 @@ public class Ingredientes {
 	public Ingredientes() {
 		super();
 	}
-	public Ingredientes(String nombre, int precio) {
+	public Ingredientes(String nombre, double precio) {
 		super();
 		this.nombre = nombre;
 		this.precio = precio;
@@ -60,10 +60,10 @@ public class Ingredientes {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public int getPrecio() {
+	public double getPrecio() {
 		return precio;
 	}
-	public void setPrecio(int precio) {
+	public void setPrecio(double precio) {
 		this.precio = precio;
 	}
 	public Set<RecetaIngredientes> getRecetas() {

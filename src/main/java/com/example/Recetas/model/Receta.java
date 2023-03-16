@@ -43,22 +43,16 @@ public class Receta{
 		super();
 	}
 
-
-
-	public Receta(int id, String nombre, Set<RecetaIngredientes> recetaingredientes, Set<Calendario> fechas) {
-		super();
-		this.id = id;
+	public Receta(String nombre,String momento, Set<RecetaIngredientes> recetaingredientes) {
 		this.nombre = nombre;
+		this.momento= momento;
 		this.recetaingredientes = recetaingredientes;
-		this.fechas = fechas;
 	}
 
-
-
 	public Receta(String nombre,String momento, IngredienteCant... ingredientecants ) {
-		super();
 		this.nombre = nombre;
 		this.momento = momento;
+		if (ingredientecants.length==0)return;
 		this.recetaingredientes = new HashSet<>();
 		for(IngredienteCant ingredientecant : ingredientecants) {
 
@@ -117,8 +111,8 @@ public class Receta{
 
 	}
 
-	public int getprecio (){
-		int result=0;
+	public double getprecio (){
+		double result=0;
 		for(RecetaIngredientes receing: recetaingredientes) {			
 			result+=receing.getCantidad()*receing.getIngrediente().getPrecio();
 		}
@@ -132,7 +126,7 @@ public class Receta{
 		result.put("nombre",this.nombre );
 		result.put("momento",this.momento );
 
-		int precio=0;
+		double precio=0;
 		List<Map<String,Object>> ingredientes= new ArrayList<>();
 		for(RecetaIngredientes x:this.recetaingredientes) {
 			Map<String,Object> recign= new HashMap<>();

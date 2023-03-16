@@ -3,6 +3,7 @@ package com.example.Recetas.controller;
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +26,10 @@ import com.example.Recetas.Utility.ListaCompra;
 import com.example.Recetas.model.Calendario;
 import com.example.Recetas.model.Ingredientes;
 import com.example.Recetas.model.Receta;
+import com.example.Recetas.model.RecetaIngredientes;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
 @CrossOrigin
@@ -65,7 +68,7 @@ public class APIcalls {
 
 		public String receta;
 		public String tiempo;
-		public int precio;
+		public double precio;
 
 
 		public recetatimeprecio(Receta recet) {
@@ -190,11 +193,11 @@ public class APIcalls {
 	@PostMapping("/getreceta")
 	public ResponseEntity<?> getreceta(@RequestBody String request){
 		Map<String, Object> json = gson.fromJson(request, Map.class);
-		
+
 		try {
-		Receta result= receta.get( (int) json.get("id")).orElseThrow(IllegalArgumentException::new) ;
-		return ResponseEntity.ok(result.tomap());
-		
+			Receta result= receta.get( (int) json.get("id")).orElseThrow(IllegalArgumentException::new) ;
+			return ResponseEntity.ok(result.tomap());
+
 		}
 		catch(IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body("La receta no existe en BBDD");
@@ -204,22 +207,58 @@ public class APIcalls {
 			return ResponseEntity.internalServerError().body(e.getStackTrace().toString());
 		}
 	}
-	
-	
+
+
 	@SuppressWarnings("unchecked")
 	@PostMapping("/setreceta")
 	public ResponseEntity<?> setreceta (@RequestBody String request) {
 
 		Map<String, Object> json = gson.fromJson(request, Map.class);
+		
+		ArrayList<LinkedTreeMap<String, Object>> ingredientesNuevos = (ArrayList<LinkedTreeMap<String, Object>>) json.get("ingredientesNuevos");
+		ArrayList<LinkedTreeMap<String, Object>> ingrediente = (ArrayList<LinkedTreeMap<String, Object>>) json.get("ingredientescant");
+		
+		Receta recet = new Receta((String)json.get("nombre"),(String)json.get("momento"));
+		HashSet<RecetaIngredientes> recetaIngredientes =  new HashSet<>();
+		
+	
+		
+		try {
+		for(LinkedTreeMap<String, Object> x:ingredientesNuevos) {
+			int cantidad = ((Double) x.get("cantidad")).intValue();
+			Ingredientes ing = new Ingredientes(
+					(String)(
+							(LinkedTreeMap<String, Object>)
+							x.get("ingrediente"))
+					.get("nombre"),
+					(Double)(
+							(LinkedTreeMap<String, Object>)
+							x.get("ingrediente"))
+					.get("precio"));
+			ingredientes.save(ing);
+			recetaIngredientes.add(new RecetaIngredientes(recet,ing,cantidad));
+			
+		}
+		}
+		catch(DataIntegrityViolationException e){
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("Un ingrediente ya existia en BD");
+		}
+		
+		//TODO manejar errores por id incorrecta
+		for(LinkedTreeMap<String, Object> x:ingrediente) {
+			int cantidad = ((Double) x.get("cantidad")).intValue();
+			Ingredientes ing = ingredientes.get(((Double) x.get("ingrediente")).intValue()).orElseThrow(IllegalArgumentException::new);
+			recetaIngredientes.add(new RecetaIngredientes(recet,ing,cantidad));
+			
+		}
+		
+		recet.setIngredientes(recetaIngredientes);
+		receta.save(recet);
 
-		Type ingcantType = new TypeToken<ArrayList<ingcant>>(){}.getType();
-
-		ArrayList<ingcant> ingcants = gson.fromJson(gson.toJson(json.get("ingredientescant")), ingcantType);
-
-		List<String> names = ingcants.stream().map(ingcant ::getIngrediente).toList();
-
-		List<Ingredientes> ings= names.stream().map((n)->ingredientes.getbyname(n)).collect(Collectors.toCollection(LinkedList::new));
-
+		
+		
+		/*
 		if (receta.getbyname((String)json.get("nombre"))!=null) {
 			return ResponseEntity
 					.badRequest()
@@ -249,7 +288,7 @@ public class APIcalls {
 
 
 
-
+*/
 		return ResponseEntity.ok("Receta guardada");
 
 
