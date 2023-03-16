@@ -1,9 +1,11 @@
 package com.example.Recetas.model;
 
-import java.util.ArrayList;
+
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
+import java.util.Map;
 
 import com.example.Recetas.Utility.IngredienteCant;
 
@@ -120,6 +122,25 @@ public class Receta{
 			result+=receing.getCantidad()*receing.getIngrediente().getPrecio();
 		}
 		return result;		
+	}
+	
+public Map<String,Object> tomap(){
+		
+		Map<String,Object> result = new HashMap<>();
+		result.put("id", this.id);
+		result.put("nombre",this.nombre );
+		result.put("momento",this.momento );
+		Map<String,Object> recign= new HashMap<>();
+		int precio=0;
+		for(RecetaIngredientes x:this.recetaingredientes) {
+		recign.put("ingrediente",x.getIngrediente().tomap());
+		recign.put("cantidad", x.getCantidad());
+			precio += x.getIngrediente().getPrecio()*x.getCantidad();
+		}
+		recign.put("precio",precio );
+		result.put("ingredientesCantidad",recign);
+		System.out.println(result.toString());
+		return result;
 	}
 
 

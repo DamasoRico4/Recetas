@@ -1,5 +1,7 @@
 package com.example.Recetas.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -70,7 +72,16 @@ public class Ingredientes {
 	public void setRecetas(Set<RecetaIngredientes> recetas) {
 		this.recetas = recetas;
 	}
-
+	public Map<String,Object> tomap(){
+		Map<String,Object> result = new HashMap<>();
+		result.put("id", this.id);
+		result.put("nombre", this.nombre);
+		result.put("precio", this.precio);
+		
+		return result;
+		
+		
+	}
 	
 	
 }
