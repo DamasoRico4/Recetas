@@ -1,6 +1,7 @@
 package com.example.Recetas.model;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,23 +27,23 @@ public class Receta{
 	private int id;
 	@Column(nullable = false,unique = true)
 	private String nombre;
-	
+
 	@Column(name="momento")
 	private String momento;
-	
+
 	@OneToMany(mappedBy = "receta",cascade = CascadeType.ALL, orphanRemoval = true)
 	Set<RecetaIngredientes> recetaingredientes;
-	
- @OneToMany(mappedBy = "receta")
- Set<Calendario> fechas;
-	
-	
-	
-	public Receta() {
-	super();
-}
 
-	
+	@OneToMany(mappedBy = "receta")
+	Set<Calendario> fechas;
+
+
+
+	public Receta() {
+		super();
+	}
+
+
 
 	public Receta(int id, String nombre, Set<RecetaIngredientes> recetaingredientes, Set<Calendario> fechas) {
 		super();
@@ -60,9 +61,9 @@ public class Receta{
 		this.momento = momento;
 		this.recetaingredientes = new HashSet<>();
 		for(IngredienteCant ingredientecant : ingredientecants) {
-			
+
 			RecetaIngredientes recetaingrediente = new RecetaIngredientes(this,ingredientecant.ingrediente,ingredientecant.cantidad);
-			
+
 			this.recetaingredientes.add(recetaingrediente);
 		}
 	}
@@ -104,18 +105,18 @@ public class Receta{
 	public void setFechas(Set<Calendario> fechas) {
 		this.fechas = fechas;
 	}
-	
+
 	public List<IngredienteCant> getingcant () {
 		return recetaingredientes.stream().map( (r)-> new IngredienteCant(r.getIngrediente(), r.getCantidad()) ).toList();
-		
+
 		/*List<IngredienteCant> result =new ArrayList<>();
 		 * List<IngredienteCant> result =new ArrayList<>();
 		 * for(RecetaIngredientes receing: recetaingredientes) {
 		 * result.add(new IngredienteCant(receing.getIngrediente(), receing.getCantidad()));
 		 * } */
-		
+
 	}
-	
+
 	public int getprecio (){
 		int result=0;
 		for(RecetaIngredientes receing: recetaingredientes) {			
@@ -123,33 +124,36 @@ public class Receta{
 		}
 		return result;		
 	}
-	
-public Map<String,Object> tomap(){
-		
+
+	public Map<String,Object> tomap(){
+
 		Map<String,Object> result = new HashMap<>();
 		result.put("id", this.id);
 		result.put("nombre",this.nombre );
 		result.put("momento",this.momento );
-		Map<String,Object> recign= new HashMap<>();
+
 		int precio=0;
+		List<Map<String,Object>> ingredientes= new ArrayList<>();
 		for(RecetaIngredientes x:this.recetaingredientes) {
-		recign.put("ingrediente",x.getIngrediente().tomap());
-		recign.put("cantidad", x.getCantidad());
+			Map<String,Object> recign= new HashMap<>();
+			recign.put("ingrediente",x.getIngrediente().tomap());
+			recign.put("cantidad", x.getCantidad());
+			ingredientes.add(recign);
 			precio += x.getIngrediente().getPrecio()*x.getCantidad();
 		}
-		recign.put("precio",precio );
-		result.put("ingredientesCantidad",recign);
+		result.put("ingredientes", ingredientes);
+		result.put("precio",precio );
 		System.out.println(result.toString());
 		return result;
 	}
 
 
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 }

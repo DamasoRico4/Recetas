@@ -182,22 +182,30 @@ public class APIcalls {
 	public ResponseEntity<?> getrecetas(){
 
 		List<Receta> rec = receta.getall();
-		String response =gson.toJson( rec.stream().map((r)-> new recetatimeprecio(r)).toList());
+		String response =gson.toJson( rec.stream().map((r)-> r.tomap()).toList());
 		return ResponseEntity.ok(response);
 
 	}
-	@PostMapping("/getingredientesreceta")
-	public ResponseEntity<?> getingredientesreceta (@RequestBody String request){
-
-		String jreceta = gson.fromJson(request, JsonObject.class).get("receta").getAsString();
-		Receta rec = receta.getbyname(jreceta);
-		if (rec == null) return ResponseEntity.badRequest().body("La receta no existe en BD");
-
-		List<IngredienteCant> ingcants = rec.getingcant();
-		//String response = gson.toJson( ingcants.stream().map( (ic)-> new ingcant(ic)).toList()); 
-		return ResponseEntity.ok(gson.toJson(ingcants));
-
+	@SuppressWarnings("unchecked")
+	@PostMapping("/getreceta")
+	public ResponseEntity<?> getreceta(@RequestBody String request){
+		Map<String, Object> json = gson.fromJson(request, Map.class);
+		
+		try {
+		Receta result= receta.get( (int) json.get("id")).orElseThrow(IllegalArgumentException::new) ;
+		return ResponseEntity.ok(result.tomap());
+		
+		}
+		catch(IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body("La receta no existe en BBDD");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(e.getStackTrace().toString());
+		}
 	}
+	
+	
 	@SuppressWarnings("unchecked")
 	@PostMapping("/setreceta")
 	public ResponseEntity<?> setreceta (@RequestBody String request) {
